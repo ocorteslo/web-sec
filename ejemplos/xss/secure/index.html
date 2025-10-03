@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo Seguro - XSS</title>
+    <!-- Content Security Policy para mayor seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2e7d32;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #2e7d32;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1b5e20;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            min-height: 50px;
+        }
+        .success {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-left: 4px solid #2e7d32;
+            margin-bottom: 20px;
+        }
+        .comment {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success">
+            <strong>✓ SEGURO:</strong> Esta página está protegida contra XSS mediante sanitización de entrada.
+        </div>
+        
+        <h1>Comentarios de Usuario (Seguro)</h1>
+        <p>Escribe un comentario:</p>
+        
+        <input type="text" id="userInput" placeholder="Tu comentario aquí...">
+        <button onclick="displayComment()">Enviar Comentario</button>
+        
+        <h2>Comentarios:</h2>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        // CÓDIGO SEGURO
+        function displayComment() {
+            const userInput = document.getElementById('userInput').value;
+            
+            // Método 1: Usar textContent en lugar de innerHTML
+            const commentDiv = document.createElement('div');
+            commentDiv.className = 'comment';
+            commentDiv.textContent = userInput; // Escapado automático
+            
+            // Método 2: Sanitizar usando una función de escape
+            // const sanitized = escapeHtml(userInput);
+            // commentDiv.innerHTML = '<p>' + sanitized + '</p>';
+            
+            document.getElementById('output').appendChild(commentDiv);
+            document.getElementById('userInput').value = '';
+        }
+        
+        // Función auxiliar para escapar HTML (alternativa)
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // Permitir enviar con Enter
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                displayComment();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "sql-injection-vulnerable-example",
+  "version": "1.0.0",
+  "description": "Ejemplo vulnerable a SQL Injection - Solo para fines educativos",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["sql-injection", "security", "vulnerable", "education"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6"
+  }
+}
